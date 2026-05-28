@@ -1,0 +1,41 @@
+# configs/baseline.yaml
+# SignMusketeers Baseline (Phase 2 supervised translation)
+# Theo paper Table 8
+
+model:
+  name: baseline
+  t5_model_name: google/t5-v1_1-base
+  dropout: 0.1
+  label_smoothing: 0.2
+
+data:
+  data_dir: .
+  features_dir: data/features/how2sign
+  max_frames: 512
+  use_confidence: false
+
+training:
+  schedule: H2S
+  batch_size_per_gpu: 16
+  num_gpus: 8
+  learning_rate: 0.001
+  train_steps: 5000
+  optimizer: adamw_torch
+  lr_schedule: cosine
+  weight_decay: 0.1
+  label_smoothing_factor: 0.2
+  grad_clipping: 1.0
+  fp16: true
+  num_workers: 4
+  seed: 42
+  finetune_steps: 5000
+
+logging:
+  test_every: 500
+  save_every: 500
+  log_every: 500
+  output_dir: logs/baseline
+
+generation:
+  max_length: 128
+  num_beams: 5

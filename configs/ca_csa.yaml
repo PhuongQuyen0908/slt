@@ -1,0 +1,48 @@
+# configs/ca_csa.yaml
+# CA-CSA: Confidence-Aware Cross-Stream Attention
+
+model:
+  name: ca_csa
+  t5_model_name: google/t5-v1_1-base
+  dropout: 0.1
+  label_smoothing: 0.2
+  stream_dim: 256
+  num_heads: 4
+  num_layers: 2
+  ffn_dim_ratio: 4
+  alpha: 0.5
+  conf_eps: 1.0e-6
+
+data:
+  data_dir: .
+  features_dir: data/features/how2sign
+  max_frames: 256
+  use_confidence: true
+
+training:
+  schedule: H2S
+  batch_size_per_gpu: 64
+  num_gpus: 8
+  learning_rate: 0.0001
+  train_steps: 5000
+  optimizer: adamw_torch
+  lr_schedule: cosine
+  weight_decay: 0.1
+  label_smoothing_factor: 0.2
+  grad_clipping: 1.0
+  fp16: true
+  num_workers: 4
+  seed: 42
+  finetune_steps: 5000
+
+logging:
+  test_every: 500
+  save_every: 500
+  log_every: 500
+  early_stop_patience: 5
+  output_dir: logs/ca_csa
+
+generation:
+  max_length: 128
+  num_beams: 5
+      
